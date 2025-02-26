@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from 'recharts'
 import { PiStudentBold } from 'react-icons/pi'
 import { IoCheckmarkCircle, IoCloseCircle } from 'react-icons/io5'
+import Calendar from '../components/Calendar'
 
 function Dashboard() {
-  const [selectedMonth, setSelectedMonth] = useState('May 2024')
+  const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedGrade, setSelectedGrade] = useState('5th')
 
   const stats = {
@@ -31,13 +32,15 @@ function Dashboard() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <div className="flex items-center gap-4">
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-4 py-2 border rounded-lg"
-          >
-            <option>May 2024</option>
-          </select>
+          <div className="w-[200px]">
+            <Calendar 
+              value={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date)
+                // Here you would typically fetch dashboard data for the new date
+              }}
+            />
+          </div>
           <select
             value={selectedGrade}
             onChange={(e) => setSelectedGrade(e.target.value)}
@@ -49,19 +52,23 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        <div className="bg-blue-100 p-6 rounded-lg">
+        <div className="bg-blue-50 p-6 rounded-xl">
           <div className="flex items-center gap-3">
-            <PiStudentBold className="text-2xl" />
+            <div className="bg-white p-2 rounded-lg">
+              <PiStudentBold className="text-2xl text-blue-600" />
+            </div>
             <div>
-              <div className="text-sm text-gray-600">Total Students</div>
+              <div className="text-sm text-gray-600">Total Student</div>
               <div className="text-2xl font-bold">{stats.totalStudents}</div>
             </div>
           </div>
         </div>
 
-        <div className="bg-blue-100 p-6 rounded-lg">
+        <div className="bg-blue-50 p-6 rounded-xl">
           <div className="flex items-center gap-3">
-            <IoCheckmarkCircle className="text-2xl" />
+            <div className="bg-white p-2 rounded-lg">
+              <IoCheckmarkCircle className="text-2xl text-green-600" />
+            </div>
             <div>
               <div className="text-sm text-gray-600">Total Present</div>
               <div className="text-2xl font-bold">{stats.presentPercentage}%</div>
@@ -69,9 +76,11 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-blue-100 p-6 rounded-lg">
+        <div className="bg-blue-50 p-6 rounded-xl">
           <div className="flex items-center gap-3">
-            <IoCloseCircle className="text-2xl" />
+            <div className="bg-white p-2 rounded-lg">
+              <IoCloseCircle className="text-2xl text-red-600" />
+            </div>
             <div>
               <div className="text-sm text-gray-600">Total Absent</div>
               <div className="text-2xl font-bold">{stats.absentPercentage}%</div>

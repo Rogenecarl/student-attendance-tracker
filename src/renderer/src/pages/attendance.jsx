@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import Calendar from '../components/Calendar'
 
 function Attendance() {
-  const [selectedMonth, setSelectedMonth] = useState('May 2024')
+  const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedGrade, setSelectedGrade] = useState('5th')
   const [students] = useState([
     { id: 1, name: 'Rahul S', attendance: [true, true, true] },
@@ -20,54 +21,64 @@ function Attendance() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Attendance</h1>
 
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className="bg-white p-6 rounded-xl shadow">
         <div className="flex gap-4 mb-6">
           <div className="flex items-center gap-2">
-            <span>Select Month:</span>
-            <input type="month" value="2024-05" className="px-4 py-2 border rounded-lg" />
+            <span className="text-gray-600">Select Month:</span>
+            <div className="w-[200px]">
+              <Calendar 
+                value={selectedDate}
+                onChange={(date) => {
+                  setSelectedDate(date)
+                  // Here you would typically fetch attendance data for the new date
+                }}
+              />
+            </div>
           </div>
           <div className="flex items-center gap-2">
-            <span>Select Grade:</span>
+            <span className="text-gray-600">Select Grade:</span>
             <select value={selectedGrade} className="px-4 py-2 border rounded-lg">
               <option>5th</option>
             </select>
           </div>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+          <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
             Search
           </button>
         </div>
 
-        <table className="w-full">
-          <thead className="bg-gray-50 border-y">
-            <tr>
-              <th className="text-left p-4">Student Id</th>
-              <th className="text-left p-4">Name</th>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((day) => (
-                <th key={day} className="text-center p-4">
-                  {day}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student) => (
-              <tr key={student.id} className="border-b">
-                <td className="p-4">{student.id}</td>
-                <td className="p-4">{student.name}</td>
-                {[...student.attendance, ...Array(12).fill(null)].map((present, idx) => (
-                  <td key={idx} className="text-center p-4">
-                    <input
-                      type="checkbox"
-                      checked={present || false}
-                      className="h-4 w-4 text-indigo-600 rounded"
-                      onChange={() => {}}
-                    />
-                  </td>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="text-left p-4 font-medium text-gray-600">Student Id</th>
+                <th className="text-left p-4 font-medium text-gray-600">Name</th>
+                {[...Array(15)].map((_, idx) => (
+                  <th key={idx} className="text-center p-4 font-medium text-gray-600">
+                    {idx + 1}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {students.map((student) => (
+                <tr key={student.id} className="border-t">
+                  <td className="p-4 text-gray-900">{student.id}</td>
+                  <td className="p-4 text-gray-900">{student.name}</td>
+                  {[...student.attendance, ...Array(12).fill(null)].map((present, idx) => (
+                    <td key={idx} className="text-center p-4">
+                      <input
+                        type="checkbox"
+                        checked={present || false}
+                        className="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        onChange={() => {}}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
